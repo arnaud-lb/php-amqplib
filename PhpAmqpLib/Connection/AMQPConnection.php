@@ -84,6 +84,9 @@ class AMQPConnection extends AbstractChannel
                 throw new \Exception ("Error Connecting to server($errno): $errstr ");
             }
 
+            $raw = socket_import_stream($this->sock);
+            socket_set_option($raw, SOL_SOCKET, SO_KEEPALIVE, 1);
+
             stream_set_timeout($this->sock, $read_write_timeout);
             stream_set_blocking($this->sock, 1);
             $this->input = new AMQPReader(null, $this->sock);
